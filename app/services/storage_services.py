@@ -62,5 +62,39 @@ class StorageService:
         except Exception as e:
             return None
 
+    def delete_transcript(self, transcript_id: str) -> bool:
+        """Hapus transkrip dari memory dan file"""
+        # Hapus dari memory
+        try:
+            if transcript_id in self.transcripts:
+                del self.transcripts[transcript_id]
 
+        # Hapus dari file
+            file_path = f"{settings.storage_path}/transcripts/{transcript_id}.json"
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            return True
+        except Exception as e:
+            return False
         
+    def list_transcripts(self) -> List[TranscriptData]:
+        """List semua transkrip yang ada di memory dan file"""
+        transcript_dir = f"{settings.storage_path}/transcripts"
+        if os.path.exists(transcript_dir):
+            for filename in os.listdir(transcript_dir):
+                if filename.endswith('.json'):
+                    transcript_id = filename[:-5] # menghapus .json
+                    if transcript_id not in self.transcripts:
+                        self.get_transcript(transcript_id) # Load from file if not in memory
+        return list(self.transcripts.values())
+    
+    def clean_old_files(self):
+        """Bersihkan file"""
+        cutoff_time = datetime.now() - timedelta(hours=settings.cleanup_after_hours)
+
+        for transcript_id, transcript in list(self.transcripts.items()):
+            if transcript.created_at < cutoff_time:
+                self.delete_transcript(transcript_id)
+
+# Global instance of StorageService
+storage = StorageService()
