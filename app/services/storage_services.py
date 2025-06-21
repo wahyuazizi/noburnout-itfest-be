@@ -1,16 +1,17 @@
 import json
 import os
 from typing import Dict, Optional, List
+from datetime import datetime, timedelta
 from app.models.transcript import TranscriptData
-from app.models.summary import SummaryData
-from app.models.study_plan import StudyPlanData
+# from app.models.summary import SummaryData
+# from app.models.study_plan import StudyPlanData
 from app.config import settings
 
 class StorageService:
     def __init__(self):
         self.transcripts: Dict[str, TranscriptData] = {}
-        self.summaries: Dict[str, SummaryData] = {}
-        self.study_plans: Dict[str, StudyPlanData] = {}
+        # self.summaries: Dict[str, SummaryData] = {}
+        # self.study_plans: Dict[str, StudyPlanData] = {}
 
         # Memastikan storgge directory ada
         self._ensure_directories()

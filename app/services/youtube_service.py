@@ -1,5 +1,5 @@
-from youtube_transcript_api import YoutubeTranscriptApi
-from urlib.parse import urlparse, parse_qs
+from youtube_transcript_api import YouTubeTranscriptApi
+from urllib.parse import urlparse, parse_qs
 import re
 from typing import Optional, List, Tuple
 from app.models.transcript import TranscriptData, TranscriptSegment, TranscriptStatus
@@ -61,7 +61,7 @@ class YouTubeService:
                     # Get first available transcript
                     available = transcript_list._manually_created_transcripts
                     if not available:
-                        available = transcript_list._generated_transcriptss
+                        available = transcript_list._generated_transcripts
                     if available:
                         transcript = list(available.values())[0]
                         
