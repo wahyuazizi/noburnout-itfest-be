@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     debug: bool = True
 
     # CORS settings
-    allowed_origins: List[str] = [
+    cors_origins: List[str] = [
         "http://localhost:5173", 
         "http://127.0.0.1:5173"
     ]
