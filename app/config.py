@@ -22,6 +22,11 @@ class Settings(BaseSettings):
     azure_openai_api_version: str
     azure_openai_endpoint: str
     azure_openai_deployment_name: str
+    
+    # Storage
+    storage_path: str = "./app/storage"
+    max_file_size_mb: int = 100
+    cleanup_after_hours: int = 24
 
     class Config:
         env_file = ".env"
