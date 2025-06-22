@@ -1,44 +1,65 @@
-"""
-transcript.py
-"""
-
 from pydantic import BaseModel, HttpUrl, Field
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 from enum import Enum
-import uuid
 
 class TranscriptStatus(str, Enum):
-    PENDING = "pending"
+    """Status of transcript processing."""
     PROCESSING = "processing"
     COMPLETED = "completed"
     FAILED = "failed"
 
-class TranscriptSegment(BaseModel):
-    start: float
-    duration: float
-    text: str
+class LanguageInfo(BaseModel):
+    """Information about available transcript language."""
+    language: str
+    language_code: str
+    is_generated: bool
+    is_translatable: bool
 
-class TranscriptData(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    youtube_url: HttpUrl
-    video_title: Optional[str] = None
-    video_duration: Optional[int] = None
-    language: Optional[str] = None
-    segments: List[TranscriptSegment] = []
-    full_text: Optional[str] = None
-    status: TranscriptStatus = TranscriptStatus.PENDING
-    created_at: datetime = Field(default_factory=datetime.now)
-    error_message: Optional[str] = None
+class TranscriptSegment(BaseModel):
+    """Individual transcript segment."""
+    start: float = Field(..., description="Start time in seconds")
+    duration: float = Field(..., description="Duration in seconds")
+    text: str = Field(..., description="Transcript text")
 
 class TranscriptRequest(BaseModel):
-    youtube_url: HttpUrl
-    language: Optional[str] = None
+    """Request model for YouTube transcript extraction."""
+    video_url: HttpUrl = Field(..., description="YouTube video URL")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            }
+        }
 
 class TranscriptResponse(BaseModel):
-    id: str
+    """Response model for transcript extraction."""
     status: TranscriptStatus
-    youtube_url: str
-    video_title: Optional[str] = None
-    created_at: datetime
-    message: Optional[str] = None
+    video_url: str
+    video_id: Optional[str] = None
+    error: Optional[str] = None
+    transcript_count: int = 0
+    available_languages: List[LanguageInfo] = []
+    selected_language: Optional[str] = None
+    transcript_preview: Optional[str] = None
+    full_transcript: Optional[str] = None
+    segments: Optional[List[TranscriptSegment]] = None
+    timestamp: datetime = Field(default_factory=datetime.now)
+    processing_time: Optional[float] = None
+    
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
+
+class TranscriptListResponse(BaseModel):
+    """Response model for listing stored transcripts."""
+    transcripts: List[Dict[str, Any]]
+    total: int
+    
+class ErrorResponse(BaseModel):
+    """Error response model."""
+    error: str
+    detail: Optional[str] = None
+    status_code: int = 400

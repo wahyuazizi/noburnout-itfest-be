@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "aiofiles>=24.1.0",
     "aioredis>=2.0.1",
     "alembic>=1.16.2",
     "azure-cognitiveservices-language-textanalytics>=0.2.2",

@@ -1,0 +1,882 @@
+{
+  "status": "completed",
+  "video_url": "https://youtu.be/26PrgjTboVQ",
+  "video_id": "26PrgjTboVQ",
+  "error": null,
+  "transcript_count": 172,
+  "available_languages": [
+    {
+      "language": "English (United Kingdom)",
+      "language_code": "en-GB",
+      "is_generated": false,
+      "is_translatable": false
+    }
+  ],
+  "selected_language": "en-GB",
+  "transcript_preview": "Hello. This is 6 Minute English from BBC Learning English. I’m Neil. And I’m Beth. When I was a boy, I wanted to be a fireman when I grew up. How about you, Beth? Did you have any childhood dreams? I ...",
+  "full_transcript": "Hello. This is 6 Minute English from BBC Learning English. I’m Neil. And I’m Beth. When I was a boy, I wanted to be a fireman when I grew up. How about you, Beth? Did you have any childhood dreams? I wanted to be an astronaut and fly to the Moon… When we’re young most of us have big dreams and plans for the future. Unfortunately, as we grow up these childhood dreams often get lost in the adult world of jobs, money, families and careers. But not for everyone… Daisy, from New Zealand, and, Herman, from Argentina are two people who decided to follow their childhood dreams. They wanted the world to become a utopia – a perfect, ideal society where everyone is happy and gets along with each other. In this programme, we’ll be hearing how Daisy and Herman made their dreams come true – not by changing the world, but by changing themselves. And, as usual, we’ll be learning some new vocabulary too. But before that I have a question for you, Beth. Following your dreams can be tough, but not following them can leave you regretting all the things you wanted to do but didn’t. In 2012, Australian nurse, Bronnie Ware, wrote her bestselling book, The Top Five Regrets of the Dying, after interviewing terminally ill patients about their life regrets. So, what do you think their top regret was? Was it: a) I wish I hadn’t worked so hard? b) I wish I had followed my dreams? or c) I wish I’d made more money? Well, I’ll guess it’s b) they wish they had followed their dreams. OK, Beth. I’ll reveal the correct answer at the end of the programme. The first dreamer we’re going to meet lives in Riverside, a peace-loving community in New Zealand where everyone shares everything. Riverside members work for the community’s businesses, including a farm, a hotel and a café. All the money they earn is collected and shared between everyone equally. Daisy, who was born in East Germany, joined Riverside in 2004. Here she explains her belief in sharing to BBC World Service programme, The Documentary. What I think I always believed in is that the sharing of resources can provide a group of people with quite a great advantage, but it doesn’t matter how many hours you work or what work you do, everyone is getting the same amount. And that is something that many people outside of Riverside struggle with, and where we’re often getting this ‘communism’ label attached to us, because it’s so… it seems so outlandish for people. Riverside isn’t a communist community. In fact, people with many different political views live there. But Daisy says that local people struggle with the idea that everything is shared. If you struggle with an idea, you find it difficult to accept or think about it. Daisy also says some local people call Riverside outlandish – strange and unusual. Our second group of dreamers are a family - the Zapps. In 2000, childhood sweethearts, Herman and Candelaria Zapp, bought a vintage car and set off from Argentina to travel around the world with less than 3.500 dollars in their pockets. Twenty-two years and three children later they have visited over a hundred countries, meeting with countless people and experiences on the way. Here, Herman Zapp explains to BBC World Service’s, The Documentary, how following his dream has changed him for the better. I am so happy with the Herman there is now, that I know now – not the one who wanted to conquer the world, but the one who was conquered by the world. I learn so much from people, and it’s amazing how the more you meet people, the more you know stories, how much more humble you become because you notice that you are a beautiful, tiny piece of sand, but a very important piece of sand like everyone is, right? After many years travelling, meeting new people and hearing their stories, Herman is more humble – not proud or arrogant. He no longer wants to conquer the world – to control it by force; rather, he has been conquered by his experiences. Herman compares himself to a beautiful but tiny piece of sand and uses the phrase 'a grain of sand' to describe things which are insignificant in themselves, but at the same time are an important part of the whole. Daisy and Herman are rare examples of dreamers who followed their dream and found a happy life, lived without regret – which reminds me of your question, Neil. Yes, I asked about Bronnie Ware’s book,\nThe Top Five Regrets of the Dying. What do you think the number one regret was,\nBeth? I guessed it was b) not following your dreams. Which was the right answer! Not having the courage to follow your dreams was listed as the top life regret. At least we have people like Daisy and Herman to remind us dreams can come true! OK, let’s recap the vocabulary from this programme, starting with 'utopia' – a perfect world where everyone is happy. If you 'struggle with an idea', you find it difficult to accept. The adjective, outlandish, means strange and unusual. 'To conquer' something means to control it by force. Someone who is 'humble' is not proud or arrogant. And finally, the phrase 'a grain of sand' describes something which is both insignificant yet somehow important. Once again, our six minutes are up. Bye for now! Goodbye!",
+  "segments": [
+    {
+      "start": 7.778,
+      "duration": 0.762,
+      "text": "Hello."
+    },
+    {
+      "start": 8.54,
+      "duration": 1.43,
+      "text": "This is 6 Minute English from"
+    },
+    {
+      "start": 9.97,
+      "duration": 1.44,
+      "text": "BBC Learning English."
+    },
+    {
+      "start": 11.41,
+      "duration": 0.901,
+      "text": "I’m Neil."
+    },
+    {
+      "start": 12.311,
+      "duration": 1.189,
+      "text": "And I’m Beth."
+    },
+    {
+      "start": 13.5,
+      "duration": 1.99,
+      "text": "When I was a boy, I wanted to be"
+    },
+    {
+      "start": 15.49,
+      "duration": 2.23,
+      "text": "a fireman when I grew up."
+    },
+    {
+      "start": 17.72,
+      "duration": 1.0,
+      "text": "How about you, Beth?"
+    },
+    {
+      "start": 18.72,
+      "duration": 1.0,
+      "text": "Did you have"
+    },
+    {
+      "start": 19.72,
+      "duration": 1.0,
+      "text": "any childhood dreams?"
+    },
+    {
+      "start": 20.72,
+      "duration": 1.83,
+      "text": "I wanted to be an astronaut"
+    },
+    {
+      "start": 22.55,
+      "duration": 1.92,
+      "text": "and fly to the Moon…"
+    },
+    {
+      "start": 24.47,
+      "duration": 1.67,
+      "text": "When we’re young most of us have"
+    },
+    {
+      "start": 26.14,
+      "duration": 2.78,
+      "text": "big dreams and plans for the future."
+    },
+    {
+      "start": 28.92,
+      "duration": 2.24,
+      "text": "Unfortunately, as we grow up these"
+    },
+    {
+      "start": 31.16,
+      "duration": 2.71,
+      "text": "childhood dreams often get lost in the"
+    },
+    {
+      "start": 33.87,
+      "duration": 3.109,
+      "text": "adult world of jobs, money,"
+    },
+    {
+      "start": 36.979,
+      "duration": 1.54,
+      "text": "families and careers."
+    },
+    {
+      "start": 38.519,
+      "duration": 1.47,
+      "text": "But not for everyone…"
+    },
+    {
+      "start": 39.989,
+      "duration": 2.71,
+      "text": "Daisy, from New Zealand, and, Herman,"
+    },
+    {
+      "start": 42.699,
+      "duration": 1.511,
+      "text": "from Argentina are two"
+    },
+    {
+      "start": 44.21,
+      "duration": 1.399,
+      "text": "people who decided"
+    },
+    {
+      "start": 45.609,
+      "duration": 2.45,
+      "text": "to follow their childhood dreams."
+    },
+    {
+      "start": 48.059,
+      "duration": 1.0,
+      "text": "They"
+    },
+    {
+      "start": 49.059,
+      "duration": 2.37,
+      "text": "wanted the world to become a utopia – a"
+    },
+    {
+      "start": 51.429,
+      "duration": 2.54,
+      "text": "perfect, ideal society where everyone is"
+    },
+    {
+      "start": 53.969,
+      "duration": 2.881,
+      "text": "happy and gets along with each other."
+    },
+    {
+      "start": 56.85,
+      "duration": 1.889,
+      "text": "In this programme, we’ll be hearing how"
+    },
+    {
+      "start": 58.739,
+      "duration": 2.771,
+      "text": "Daisy and Herman made their dreams"
+    },
+    {
+      "start": 61.51,
+      "duration": 3.119,
+      "text": "come true – not by changing the world,"
+    },
+    {
+      "start": 64.629,
+      "duration": 1.621,
+      "text": "but by changing themselves."
+    },
+    {
+      "start": 66.25,
+      "duration": 1.42,
+      "text": "And, as usual,"
+    },
+    {
+      "start": 67.67,
+      "duration": 2.76,
+      "text": "we’ll be learning some new vocabulary too."
+    },
+    {
+      "start": 70.43,
+      "duration": 2.2,
+      "text": "But before that I have a question"
+    },
+    {
+      "start": 72.63,
+      "duration": 1.79,
+      "text": "for you, Beth."
+    },
+    {
+      "start": 74.42,
+      "duration": 1.0,
+      "text": "Following your dreams can"
+    },
+    {
+      "start": 75.42,
+      "duration": 2.65,
+      "text": "be tough, but not following them can leave"
+    },
+    {
+      "start": 78.07,
+      "duration": 2.25,
+      "text": "you regretting all the things you wanted"
+    },
+    {
+      "start": 80.32,
+      "duration": 1.96,
+      "text": "to do but didn’t."
+    },
+    {
+      "start": 82.28,
+      "duration": 1.85,
+      "text": "In 2012, Australian nurse,"
+    },
+    {
+      "start": 84.13,
+      "duration": 2.32,
+      "text": "Bronnie Ware, wrote her bestselling book,"
+    },
+    {
+      "start": 86.45,
+      "duration": 2.281,
+      "text": "The Top Five Regrets of the Dying, after"
+    },
+    {
+      "start": 88.731,
+      "duration": 2.539,
+      "text": "interviewing terminally ill patients about"
+    },
+    {
+      "start": 91.27,
+      "duration": 1.43,
+      "text": "their life regrets."
+    },
+    {
+      "start": 92.7,
+      "duration": 1.68,
+      "text": "So, what do you think"
+    },
+    {
+      "start": 94.38,
+      "duration": 2.18,
+      "text": "their top regret was?"
+    },
+    {
+      "start": 96.56,
+      "duration": 1.0,
+      "text": "Was it:"
+    },
+    {
+      "start": 97.56,
+      "duration": 2.39,
+      "text": "a) I wish I hadn’t worked so hard?"
+    },
+    {
+      "start": 99.95,
+      "duration": 2.7,
+      "text": "b) I wish I had followed my dreams?"
+    },
+    {
+      "start": 102.65,
+      "duration": 1.0,
+      "text": "or"
+    },
+    {
+      "start": 103.65,
+      "duration": 1.49,
+      "text": "c) I wish I’d made more money?"
+    },
+    {
+      "start": 105.14,
+      "duration": 3.16,
+      "text": "Well, I’ll guess it’s b) they wish they"
+    },
+    {
+      "start": 108.3,
+      "duration": 1.28,
+      "text": "had followed their dreams."
+    },
+    {
+      "start": 109.58,
+      "duration": 1.0,
+      "text": "OK, Beth."
+    },
+    {
+      "start": 110.58,
+      "duration": 1.329,
+      "text": "I’ll reveal the correct answer"
+    },
+    {
+      "start": 111.909,
+      "duration": 1.841,
+      "text": "at the end of the programme."
+    },
+    {
+      "start": 113.75,
+      "duration": 2.45,
+      "text": "The first dreamer we’re going to meet lives"
+    },
+    {
+      "start": 116.2,
+      "duration": 3.29,
+      "text": "in Riverside, a peace-loving community in"
+    },
+    {
+      "start": 119.49,
+      "duration": 1.919,
+      "text": "New Zealand where everyone shares"
+    },
+    {
+      "start": 121.409,
+      "duration": 1.381,
+      "text": "everything."
+    },
+    {
+      "start": 122.79,
+      "duration": 1.35,
+      "text": "Riverside members work for"
+    },
+    {
+      "start": 124.14,
+      "duration": 2.4,
+      "text": "the community’s businesses, including"
+    },
+    {
+      "start": 126.54,
+      "duration": 3.57,
+      "text": "a farm, a hotel and a café."
+    },
+    {
+      "start": 130.11,
+      "duration": 1.0,
+      "text": "All the money they"
+    },
+    {
+      "start": 131.11,
+      "duration": 1.93,
+      "text": "earn is collected and shared"
+    },
+    {
+      "start": 133.04,
+      "duration": 1.74,
+      "text": "between everyone equally."
+    },
+    {
+      "start": 134.78,
+      "duration": 2.429,
+      "text": "Daisy, who was born in East Germany,"
+    },
+    {
+      "start": 137.209,
+      "duration": 2.971,
+      "text": "joined Riverside in 2004."
+    },
+    {
+      "start": 140.18,
+      "duration": 1.0,
+      "text": "Here she explains"
+    },
+    {
+      "start": 141.18,
+      "duration": 1.699,
+      "text": "her belief in sharing to BBC"
+    },
+    {
+      "start": 142.879,
+      "duration": 3.681,
+      "text": "World Service programme, The Documentary."
+    },
+    {
+      "start": 146.56,
+      "duration": 2.73,
+      "text": "What I think I always believed in is that"
+    },
+    {
+      "start": 149.29,
+      "duration": 2.5,
+      "text": "the sharing of resources can provide"
+    },
+    {
+      "start": 151.79,
+      "duration": 1.91,
+      "text": "a group of people with quite a great"
+    },
+    {
+      "start": 153.7,
+      "duration": 2.049,
+      "text": "advantage, but it doesn’t matter how"
+    },
+    {
+      "start": 155.749,
+      "duration": 2.0,
+      "text": "many hours you work or what work"
+    },
+    {
+      "start": 157.749,
+      "duration": 1.41,
+      "text": "you do, everyone is getting the"
+    },
+    {
+      "start": 159.159,
+      "duration": 1.66,
+      "text": "same amount."
+    },
+    {
+      "start": 160.819,
+      "duration": 1.0,
+      "text": "And that is something"
+    },
+    {
+      "start": 161.819,
+      "duration": 1.601,
+      "text": "that many people outside of"
+    },
+    {
+      "start": 163.42,
+      "duration": 2.23,
+      "text": "Riverside struggle with, and where"
+    },
+    {
+      "start": 165.65,
+      "duration": 2.39,
+      "text": "we’re often getting this ‘communism’"
+    },
+    {
+      "start": 168.04,
+      "duration": 3.729,
+      "text": "label attached to us, because it’s so…"
+    },
+    {
+      "start": 171.769,
+      "duration": 3.08,
+      "text": "it seems so outlandish for people."
+    },
+    {
+      "start": 174.849,
+      "duration": 2.911,
+      "text": "Riverside isn’t a communist community."
+    },
+    {
+      "start": 177.76,
+      "duration": 2.83,
+      "text": "In fact, people with many different political"
+    },
+    {
+      "start": 180.59,
+      "duration": 1.61,
+      "text": "views live there."
+    },
+    {
+      "start": 182.2,
+      "duration": 1.709,
+      "text": "But Daisy says that local"
+    },
+    {
+      "start": 183.909,
+      "duration": 2.2,
+      "text": "people struggle with the idea that"
+    },
+    {
+      "start": 186.109,
+      "duration": 1.92,
+      "text": "everything is shared."
+    },
+    {
+      "start": 188.029,
+      "duration": 1.091,
+      "text": "If you struggle with"
+    },
+    {
+      "start": 189.12,
+      "duration": 2.31,
+      "text": "an idea, you find it difficult to"
+    },
+    {
+      "start": 191.43,
+      "duration": 2.069,
+      "text": "accept or think about it."
+    },
+    {
+      "start": 193.499,
+      "duration": 2.35,
+      "text": "Daisy also says some local people"
+    },
+    {
+      "start": 195.849,
+      "duration": 2.42,
+      "text": "call Riverside outlandish –"
+    },
+    {
+      "start": 198.269,
+      "duration": 2.03,
+      "text": "strange and unusual."
+    },
+    {
+      "start": 200.299,
+      "duration": 1.94,
+      "text": "Our second group of dreamers are"
+    },
+    {
+      "start": 202.239,
+      "duration": 2.491,
+      "text": "a family - the Zapps."
+    },
+    {
+      "start": 204.73,
+      "duration": 1.819,
+      "text": "In 2000, childhood"
+    },
+    {
+      "start": 206.549,
+      "duration": 2.52,
+      "text": "sweethearts, Herman and Candelaria Zapp,"
+    },
+    {
+      "start": 209.069,
+      "duration": 2.24,
+      "text": "bought a vintage car and set off"
+    },
+    {
+      "start": 211.309,
+      "duration": 2.22,
+      "text": "from Argentina to travel around"
+    },
+    {
+      "start": 213.529,
+      "duration": 3.68,
+      "text": "the world with less than 3.500 dollars"
+    },
+    {
+      "start": 217.209,
+      "duration": 1.651,
+      "text": "in their pockets."
+    },
+    {
+      "start": 218.86,
+      "duration": 1.439,
+      "text": "Twenty-two years and"
+    },
+    {
+      "start": 220.299,
+      "duration": 2.791,
+      "text": "three children later they have visited"
+    },
+    {
+      "start": 223.09,
+      "duration": 2.42,
+      "text": "over a hundred countries, meeting"
+    },
+    {
+      "start": 225.51,
+      "duration": 1.44,
+      "text": "with countless people and"
+    },
+    {
+      "start": 226.95,
+      "duration": 2.099,
+      "text": "experiences on the way."
+    },
+    {
+      "start": 229.049,
+      "duration": 2.381,
+      "text": "Here, Herman Zapp explains to BBC"
+    },
+    {
+      "start": 231.43,
+      "duration": 2.34,
+      "text": "World Service’s, The Documentary, how"
+    },
+    {
+      "start": 233.77,
+      "duration": 1.639,
+      "text": "following his dream has"
+    },
+    {
+      "start": 235.409,
+      "duration": 1.73,
+      "text": "changed him for the better."
+    },
+    {
+      "start": 237.139,
+      "duration": 3.121,
+      "text": "I am so happy with the Herman there is now,"
+    },
+    {
+      "start": 240.26,
+      "duration": 2.259,
+      "text": "that I know now – not the one who"
+    },
+    {
+      "start": 242.519,
+      "duration": 1.92,
+      "text": "wanted to conquer the world, but the one"
+    },
+    {
+      "start": 244.439,
+      "duration": 1.76,
+      "text": "who was conquered by the world."
+    },
+    {
+      "start": 246.199,
+      "duration": 1.0,
+      "text": "I learn"
+    },
+    {
+      "start": 247.199,
+      "duration": 1.691,
+      "text": "so much from people, and it’s"
+    },
+    {
+      "start": 248.89,
+      "duration": 1.559,
+      "text": "amazing how the more you meet people,"
+    },
+    {
+      "start": 250.449,
+      "duration": 1.82,
+      "text": "the more you know stories, how"
+    },
+    {
+      "start": 252.269,
+      "duration": 2.351,
+      "text": "much more humble you become because"
+    },
+    {
+      "start": 254.62,
+      "duration": 2.44,
+      "text": "you notice that you are a beautiful, tiny"
+    },
+    {
+      "start": 257.06,
+      "duration": 3.4,
+      "text": "piece of sand, but a very important piece"
+    },
+    {
+      "start": 260.46,
+      "duration": 2.98,
+      "text": "of sand like everyone is, right?"
+    },
+    {
+      "start": 263.44,
+      "duration": 2.0,
+      "text": "After many years travelling, meeting"
+    },
+    {
+      "start": 265.44,
+      "duration": 2.99,
+      "text": "new people and hearing their stories,"
+    },
+    {
+      "start": 268.43,
+      "duration": 2.95,
+      "text": "Herman is more humble – not proud or"
+    },
+    {
+      "start": 271.38,
+      "duration": 1.38,
+      "text": "arrogant."
+    },
+    {
+      "start": 272.76,
+      "duration": 1.18,
+      "text": "He no longer wants to"
+    },
+    {
+      "start": 273.94,
+      "duration": 2.93,
+      "text": "conquer the world – to control it by force;"
+    },
+    {
+      "start": 276.87,
+      "duration": 1.99,
+      "text": "rather, he has been conquered"
+    },
+    {
+      "start": 278.86,
+      "duration": 2.18,
+      "text": "by his experiences."
+    },
+    {
+      "start": 281.04,
+      "duration": 2.19,
+      "text": "Herman compares himself to a beautiful"
+    },
+    {
+      "start": 283.23,
+      "duration": 3.53,
+      "text": "but tiny piece of sand and uses the phrase"
+    },
+    {
+      "start": 286.76,
+      "duration": 2.51,
+      "text": "'a grain of sand' to describe things which"
+    },
+    {
+      "start": 289.27,
+      "duration": 2.68,
+      "text": "are insignificant in themselves, but"
+    },
+    {
+      "start": 291.95,
+      "duration": 2.21,
+      "text": "at the same time are an important"
+    },
+    {
+      "start": 294.16,
+      "duration": 1.54,
+      "text": "part of the whole."
+    },
+    {
+      "start": 295.7,
+      "duration": 2.42,
+      "text": "Daisy and Herman are rare examples"
+    },
+    {
+      "start": 298.12,
+      "duration": 2.47,
+      "text": "of dreamers who followed their dream"
+    },
+    {
+      "start": 300.59,
+      "duration": 2.17,
+      "text": "and found a happy life, lived without"
+    },
+    {
+      "start": 302.76,
+      "duration": 2.0,
+      "text": "regret – which reminds me"
+    },
+    {
+      "start": 304.76,
+      "duration": 1.12,
+      "text": "of your question, Neil."
+    },
+    {
+      "start": 305.88,
+      "duration": 5.48,
+      "text": "Yes, I asked about Bronnie Ware’s book,\nThe Top Five Regrets of the Dying."
+    },
+    {
+      "start": 311.36,
+      "duration": 3.06,
+      "text": "What do you think the number one regret was,\nBeth?"
+    },
+    {
+      "start": 314.42,
+      "duration": 3.63,
+      "text": "I guessed it was b) not following your dreams."
+    },
+    {
+      "start": 318.05,
+      "duration": 2.59,
+      "text": "Which was the right answer!"
+    },
+    {
+      "start": 320.64,
+      "duration": 1.0,
+      "text": "Not having"
+    },
+    {
+      "start": 321.64,
+      "duration": 1.86,
+      "text": "the courage to follow your dreams was"
+    },
+    {
+      "start": 323.5,
+      "duration": 3.06,
+      "text": "listed as the top life regret."
+    },
+    {
+      "start": 326.56,
+      "duration": 1.0,
+      "text": "At least we"
+    },
+    {
+      "start": 327.56,
+      "duration": 1.18,
+      "text": "have people like Daisy and Herman"
+    },
+    {
+      "start": 328.74,
+      "duration": 2.25,
+      "text": "to remind us dreams can come true!"
+    },
+    {
+      "start": 330.99,
+      "duration": 2.8,
+      "text": "OK, let’s recap the vocabulary from"
+    },
+    {
+      "start": 333.79,
+      "duration": 1.69,
+      "text": "this programme, starting with"
+    },
+    {
+      "start": 335.48,
+      "duration": 2.77,
+      "text": "'utopia' – a perfect world where"
+    },
+    {
+      "start": 338.25,
+      "duration": 1.41,
+      "text": "everyone is happy."
+    },
+    {
+      "start": 339.66,
+      "duration": 1.81,
+      "text": "If you 'struggle with an idea',"
+    },
+    {
+      "start": 341.47,
+      "duration": 2.1,
+      "text": "you find it difficult to accept."
+    },
+    {
+      "start": 343.57,
+      "duration": 2.27,
+      "text": "The adjective, outlandish, means"
+    },
+    {
+      "start": 345.84,
+      "duration": 2.18,
+      "text": "strange and unusual."
+    },
+    {
+      "start": 348.02,
+      "duration": 1.54,
+      "text": "'To conquer' something means"
+    },
+    {
+      "start": 349.56,
+      "duration": 2.23,
+      "text": "to control it by force."
+    },
+    {
+      "start": 351.79,
+      "duration": 1.52,
+      "text": "Someone who is 'humble' is"
+    },
+    {
+      "start": 353.31,
+      "duration": 2.09,
+      "text": "not proud or arrogant."
+    },
+    {
+      "start": 355.4,
+      "duration": 2.3,
+      "text": "And finally, the phrase 'a grain of sand'"
+    },
+    {
+      "start": 357.7,
+      "duration": 1.86,
+      "text": "describes something which is both"
+    },
+    {
+      "start": 359.56,
+      "duration": 3.13,
+      "text": "insignificant yet somehow important."
+    },
+    {
+      "start": 362.69,
+      "duration": 2.262,
+      "text": "Once again, our six minutes are up."
+    },
+    {
+      "start": 364.952,
+      "duration": 0.767,
+      "text": "Bye for now!"
+    },
+    {
+      "start": 365.719,
+      "duration": 0.971,
+      "text": "Goodbye!"
+    }
+  ],
+  "timestamp": "2025-06-22T14:01:05.373530",
+  "processing_time": 2.9145445823669434
+}

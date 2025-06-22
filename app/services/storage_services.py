@@ -1,101 +1,141 @@
 import json
-import os
-from typing import Dict, Optional, List
-from datetime import datetime, timedelta
-from app.models.transcript import TranscriptData
-# from app.models.summary import SummaryData
-# from app.models.study_plan import StudyPlanData
+import aiofiles
+from pathlib import Path
+from typing import Optional, List, Dict, Any
+from datetime import datetime
+
 from app.config import settings
+from app.models.transcript import TranscriptResponse
 
 class StorageService:
+    """Service for storing and retrieving transcripts."""
+    
     def __init__(self):
-        self.transcripts: Dict[str, TranscriptData] = {}
-        # self.summaries: Dict[str, SummaryData] = {}
-        # self.study_plans: Dict[str, StudyPlanData] = {}
-
-        # Memastikan storgge directory ada
-        self._ensure_directories()
-
-    def _ensure_directories(self):
-        """buat storage directory jika belum ada"""
-        directories = [
-            f"{settings.storage_path}/transcripts",
-            f"{settings.storage_path}/summaries",
-            f"{settings.storage_path}/study_plans",
-            f"{settings.storage_path}/pdfs",
-            f"{settings.storage_path}/markdown",
-        ]
-
-        for directory in directories:
-            os.makedirs(directory, exist_ok=True)
-
-    # Transkription Methods
-    def save_transcript(self, transcript: TranscriptData) -> bool:
-        """Simpan transkrip ke storage"""
+        self.transcripts_dir = settings.transcripts_dir
+        # In-memory cache for quick access
+        self._cache: Dict[str, TranscriptResponse] = {}
+    
+    def _get_file_path(self, video_id: str) -> Path:
+        """Get file path for video transcript."""
+        return self.transcripts_dir / f"{video_id}.json"
+    
+    async def save_transcript(self, transcript: TranscriptResponse) -> bool:
+        """Save transcript to file and cache."""
+        if not transcript.video_id:
+            return False
+            
         try:
-            self.transcripts[transcript.id] = transcript
-
-            # Simpan ke file
-            file_path = f"{settings.storage_path}/transcripts/{transcript.id}.json"
-            with open(file_path, 'w') as f:
-                json.dump(transcript.model_dump(mode='json'), f, ensure_ascii=False, index=2)
+            file_path = self._get_file_path(transcript.video_id)
+            
+            # Convert to dict for JSON serialization
+            data = transcript.model_dump()
+            data['timestamp'] = transcript.timestamp.isoformat()
+            
+            # Save to file
+            async with aiofiles.open(file_path, 'w', encoding='utf-8') as f:
+                await f.write(json.dumps(data, indent=2, ensure_ascii=False))
+            
+            # Save to cache
+            self._cache[transcript.video_id] = transcript
             
             return True
-
+            
         except Exception as e:
+            print(f"Error saving transcript: {str(e)}")
             return False
-
-    def get_transcript(self, transcript_id: str) -> Optional[TranscriptData]:
-        """Ambil transkrip dari memory atau file"""
-        # Cek di memory
-        if transcript_id in self.transcripts:
-            return self.transcripts[transcript_id]
-
-        # Cek di file
-        try:
-            file_path = f"{settings.storage_path}/transcripts/{transcript_id}.json"
-            if os.path.exists(file_path):
-                with open(file_path, 'r') as f:
-                    data = json.load(f)
-                    transcript = TranscriptData(**data)
-                    self.transcripts[transcript_id] = transcript
-                    return transcript
-        except Exception as e:
-            return None
-
-    def delete_transcript(self, transcript_id: str) -> bool:
-        """Hapus transkrip dari memory dan file"""
-        # Hapus dari memory
-        try:
-            if transcript_id in self.transcripts:
-                del self.transcripts[transcript_id]
-
-        # Hapus dari file
-            file_path = f"{settings.storage_path}/transcripts/{transcript_id}.json"
-            if os.path.exists(file_path):
-                os.remove(file_path)
-            return True
-        except Exception as e:
-            return False
-        
-    def list_transcripts(self) -> List[TranscriptData]:
-        """List semua transkrip yang ada di memory dan file"""
-        transcript_dir = f"{settings.storage_path}/transcripts"
-        if os.path.exists(transcript_dir):
-            for filename in os.listdir(transcript_dir):
-                if filename.endswith('.json'):
-                    transcript_id = filename[:-5] # menghapus .json
-                    if transcript_id not in self.transcripts:
-                        self.get_transcript(transcript_id) # Load from file if not in memory
-        return list(self.transcripts.values())
     
-    def clean_old_files(self):
-        """Bersihkan file"""
-        cutoff_time = datetime.now() - timedelta(hours=settings.cleanup_after_hours)
+    async def get_transcript(self, video_id: str) -> Optional[TranscriptResponse]:
+        """Get transcript from cache or file."""
+        
+        # Try cache first
+        if video_id in self._cache:
+            return self._cache[video_id]
+        
+        # Try file
+        try:
+            file_path = self._get_file_path(video_id)
+            if not file_path.exists():
+                return None
+            
+            async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
+                content = await f.read()
+                data = json.loads(content)
+                
+                # Parse timestamp
+                if 'timestamp' in data and isinstance(data['timestamp'], str):
+                    data['timestamp'] = datetime.fromisoformat(data['timestamp'])
+                
+                transcript = TranscriptResponse(**data)
+                
+                # Add to cache
+                self._cache[video_id] = transcript
+                
+                return transcript
+                
+        except Exception as e:
+            print(f"Error loading transcript: {str(e)}")
+            return None
+    
+    async def list_transcripts(self, limit: int = 100) -> List[Dict[str, Any]]:
+        """List all stored transcripts."""
+        transcripts = []
+        
+        try:
+            # Get all JSON files in transcripts directory
+            for file_path in self.transcripts_dir.glob("*.json"):
+                try:
+                    async with aiofiles.open(file_path, 'r', encoding='utf-8') as f:
+                        content = await f.read()
+                        data = json.loads(content)
+                        
+                        # Add basic info for listing
+                        transcript_info = {
+                            "video_id": data.get("video_id"),
+                            "video_url": data.get("video_url"),
+                            "status": data.get("status"),
+                            "selected_language": data.get("selected_language"),
+                            "transcript_count": data.get("transcript_count", 0),
+                            "timestamp": data.get("timestamp"),
+                            "transcript_preview": data.get("transcript_preview")
+                        }
+                        
+                        transcripts.append(transcript_info)
+                        
+                        if len(transcripts) >= limit:
+                            break
+                            
+                except Exception:
+                    # Skip invalid files
+                    continue
+            
+            # Sort by timestamp (newest first)
+            transcripts.sort(
+                key=lambda x: x.get("timestamp", ""), 
+                reverse=True
+            )
+            
+        except Exception as e:
+            print(f"Error listing transcripts: {str(e)}")
+        
+        return transcripts
+    
+    async def delete_transcript(self, video_id: str) -> bool:
+        """Delete transcript from file and cache."""
+        try:
+            # Remove from cache
+            if video_id in self._cache:
+                del self._cache[video_id]
+            
+            # Remove file
+            file_path = self._get_file_path(video_id)
+            if file_path.exists():
+                file_path.unlink()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error deleting transcript: {str(e)}")
+            return False
 
-        for transcript_id, transcript in list(self.transcripts.items()):
-            if transcript.created_at < cutoff_time:
-                self.delete_transcript(transcript_id)
-
-# Global instance of StorageService
-storage = StorageService()
+# Create service instance
+storage_service = StorageService()

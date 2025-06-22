@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Debug script untuk test YouTube transcript langsung
+Debug script untuk test YouTube transcript langsung dengan perbaikan
 """
 
 import json
@@ -61,7 +61,7 @@ def test_youtube_transcript(video_url: str) -> Dict[str, Any]:
         result["video_id"] = video_id
         print(f"✅ Video ID extracted: {video_id}")
         
-        # Step 2: List available transcripts
+        # Step 2: List available transcripts with proper error handling
         try:
             transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
             print("✅ Successfully connected to YouTube")
@@ -109,24 +109,30 @@ def test_youtube_transcript(video_url: str) -> Dict[str, Any]:
         except Exception as e:
             print(f"⚠️ Error listing languages: {str(e)}")
         
-        # Step 4: Try to get a transcript
+        # Step 4: Try to get a transcript dengan priority yang diperbaiki
         transcript = None
         selected_language = None
         
-        # Priority: Manual English -> Generated English -> Any Manual -> Any Generated
+        # Priority: Manual English variants -> Generated English variants -> Any Manual -> Any Generated
+        english_codes = ['en', 'en-US', 'en-GB', 'en-CA', 'en-AU']
+        
+        # Try manual English variants first
         for transcript_source, source_name in [(manual_transcripts, "manual"), (generated_transcripts, "generated")]:
             if transcript:
                 break
                 
-            # Try English first
-            for t in transcript_source:
-                if t.language_code in ['en', 'en-US', 'en-GB']:
-                    transcript = t
-                    selected_language = t.language_code
-                    print(f"✅ Selected {source_name} English transcript ({selected_language})")
+            # Try English variants
+            for lang_code in english_codes:
+                for t in transcript_source:
+                    if t.language_code == lang_code:
+                        transcript = t
+                        selected_language = t.language_code
+                        print(f"✅ Selected {source_name} {t.language} transcript ({selected_language})")
+                        break
+                if transcript:
                     break
                     
-            # If no English, try first available
+            # If no English variants, try first available in this category
             if not transcript and transcript_source:
                 transcript = transcript_source[0]
                 selected_language = transcript.language_code
@@ -154,27 +160,31 @@ def test_youtube_transcript(video_url: str) -> Dict[str, Any]:
             result["transcript_count"] = len(transcript_entries)
             print(f"✅ Retrieved {len(transcript_entries)} transcript segments")
             
-            # Process transcript
+            # Process transcript dengan error handling yang lebih baik
             segments = []
             full_text_parts = []
             
             for i, entry in enumerate(transcript_entries):
                 try:
+                    # Debug: log entry structure for first few entries
+                    if i < 3:
+                        print(f"   Debug entry {i}: type={type(entry)}, attributes={[attr for attr in dir(entry) if not attr.startswith('_')]}")
+                    
                     # Access attributes directly from FetchedTranscriptSnippet object
                     segment = {
-                        "start": float(entry.start) if hasattr(entry, 'start') else 0.0,
-                        "duration": float(entry.duration) if hasattr(entry, 'duration') else 0.0,
-                        "text": entry.text.strip() if hasattr(entry, 'text') and entry.text else ''
+                        "start": float(getattr(entry, 'start', 0.0)),
+                        "duration": float(getattr(entry, 'duration', 0.0)),
+                        "text": getattr(entry, 'text', '').strip()
                     }
+                    
                     segments.append(segment)
                     if segment['text']:
                         full_text_parts.append(segment['text'])
                         
                 except Exception as e:
                     print(f"⚠️ Error processing segment {i}: {str(e)}")
-                    # Debug: print attributes of the entry object
-                    print(f"   Entry type: {type(entry)}")
-                    print(f"   Entry attributes: {dir(entry)}")
+                    # More detailed debug info
+                    print(f"   Entry: {entry}")
                     if hasattr(entry, '__dict__'):
                         print(f"   Entry dict: {entry.__dict__}")
                     continue
@@ -200,22 +210,26 @@ def test_youtube_transcript(video_url: str) -> Dict[str, Any]:
             result["status"] = "failed"
             result["error"] = f"Failed to fetch transcript: {str(e)}"
             print(f"❌ Error fetching transcript: {str(e)}")
+            import traceback
+            print(f"   Traceback: {traceback.format_exc()}")
             return result
             
     except Exception as e:
         result["status"] = "failed"
         result["error"] = f"Unexpected error: {str(e)}"
         print(f"❌ Unexpected error: {str(e)}")
+        import traceback
+        print(f"   Traceback: {traceback.format_exc()}")
     
     return result
 
 def main():
     """Main function to test YouTube transcript."""
     
-    # Test URLs - ganti dengan URL video yang ingin Anda test
+    # Test URLs - gunakan URL dari error log Anda
     test_urls = [
+        "https://www.youtube.com/watch?v=Y681hXWwhQY",  # URL dari error log
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ",  # Rick Roll - has transcript
-        "https://youtu.be/dQw4w9WgXcQ",  # Same video, short URL
     ]
     
     # Atau ambil URL dari command line argument

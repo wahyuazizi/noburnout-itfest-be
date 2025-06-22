@@ -1,17 +1,24 @@
-from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api.formatters import TextFormatter
-from urllib.parse import urlparse, parse_qs
 import re
-import logging
-from typing import Optional, List, Tuple
-from app.models.transcript import TranscriptData, TranscriptSegment, TranscriptStatus
+import time
+from typing import Optional, List, Dict, Any
+from datetime import datetime
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
 
-# Setup logging
-logger = logging.getLogger(__name__)
+from app.models.transcript import (
+    TranscriptResponse, 
+    TranscriptStatus, 
+    LanguageInfo, 
+    TranscriptSegment
+)
 
 class YouTubeService:
-    @staticmethod
-    def extract_video_id(url: str) -> Optional[str]:
+    """Service for YouTube transcript extraction."""
+    
+    def __init__(self):
+        self.english_codes = ['en', 'en-US', 'en-GB', 'en-CA', 'en-AU']
+    
+    def extract_video_id(self, url: str) -> Optional[str]:
         """Extract YouTube video ID from URL."""
         if not url:
             return None
@@ -27,172 +34,163 @@ class YouTubeService:
             match = re.search(pattern, url)
             if match:
                 video_id = match.group(1)
-                # Clean video ID (remove any extra parameters)
                 video_id = re.sub(r'[^a-zA-Z0-9_-].*', '', video_id)
                 return video_id
         return None
 
-    @staticmethod
-    def get_transcript(video_url: str, language: Optional[str] = None, timeout: int = 30) -> TranscriptData:
+    async def get_transcript(self, video_url: str) -> TranscriptResponse:
         """
-        Get transcript from YouTube video with improved error handling.
+        Extract transcript from YouTube video.
+        Based on your working debug script.
+        """
+        start_time = time.time()
         
-        Args:
-            video_url (str): YouTube video URL
-            language (Optional[str], optional): Preferred language code. Defaults to None.
-            timeout (int): Request timeout in seconds. Defaults to 30.
-            
-        Returns:
-            TranscriptData: Transcript data with status
-        """
-        transcript_data = TranscriptData(
-            youtube_url=video_url,
-            status=TranscriptStatus.PROCESSING
+        result = TranscriptResponse(
+            status=TranscriptStatus.PROCESSING,
+            video_url=str(video_url),
+            timestamp=datetime.now()
         )
         
         try:
-            logger.info(f"Processing transcript for URL: {video_url}")
-            
-            # Validate and extract video ID
-            video_id = YouTubeService.extract_video_id(video_url)
+            # Step 1: Extract video ID
+            video_id = self.extract_video_id(str(video_url))
             if not video_id:
-                logger.error(f"Invalid YouTube URL: {video_url}")
-                transcript_data.status = TranscriptStatus.FAILED
-                transcript_data.error_message = "Invalid YouTube URL format"
-                return transcript_data
+                result.status = TranscriptStatus.FAILED
+                result.error = "Invalid YouTube URL"
+                return result
+                
+            result.video_id = video_id
             
-            logger.info(f"Extracted video ID: {video_id}")
-            
-            # Get available transcripts with timeout handling
+            # Step 2: List available transcripts with proper error handling
             try:
                 transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
-                logger.info(f"Retrieved transcript list for video: {video_id}")
+            except TranscriptsDisabled:
+                result.status = TranscriptStatus.FAILED
+                result.error = "Transcripts are disabled for this video"
+                return result
+            except NoTranscriptFound:
+                result.status = TranscriptStatus.FAILED
+                result.error = "No transcripts found for this video"
+                return result
             except Exception as e:
-                logger.error(f"Failed to list transcripts for {video_id}: {str(e)}")
-                transcript_data.status = TranscriptStatus.FAILED
-                transcript_data.error_message = f"Cannot access video transcripts: {str(e)}"
-                return transcript_data
+                result.status = TranscriptStatus.FAILED
+                result.error = f"Failed to access video: {str(e)}"
+                return result
             
-            # Try to get transcript in preferred order
+            # Step 3: Get available languages
+            available_languages = []
+            manual_transcripts = []
+            generated_transcripts = []
+            
+            try:
+                for transcript in transcript_list:
+                    lang_info = LanguageInfo(
+                        language=transcript.language,
+                        language_code=transcript.language_code,
+                        is_generated=transcript.is_generated,
+                        is_translatable=transcript.is_translatable
+                    )
+                    available_languages.append(lang_info)
+                    
+                    if transcript.is_generated:
+                        generated_transcripts.append(transcript)
+                    else:
+                        manual_transcripts.append(transcript)
+                        
+                result.available_languages = available_languages
+                    
+            except Exception as e:
+                # Continue even if language listing fails
+                pass
+            
+            # Step 4: Try to get a transcript with priority
             transcript = None
             selected_language = None
             
-            # Priority order for language selection
-            if language:
-                try:
-                    transcript = transcript_list.find_transcript([language])
-                    selected_language = language
-                    logger.info(f"Found transcript in requested language: {language}")
-                except Exception as e:
-                    logger.warning(f"Requested language {language} not found: {str(e)}")
+            # Priority: Manual English variants -> Generated English variants -> Any Manual -> Any Generated
+            for transcript_source in [manual_transcripts, generated_transcripts]:
+                if transcript:
+                    break
                     
-            if not transcript:
-                # Try auto-generated English
-                try:
-                    transcript = transcript_list.find_generated_transcript(['en'])
-                    selected_language = 'en'
-                    logger.info("Using auto-generated English transcript")
-                except Exception as e:
-                    logger.warning(f"Auto-generated English not found: {str(e)}")
-                    
-            if not transcript:
-                # Try manually created transcripts
-                try:
-                    manual_transcripts = transcript_list._manually_created_transcripts
-                    if manual_transcripts:
-                        transcript = list(manual_transcripts.values())[0]
-                        selected_language = transcript.language_code
-                        logger.info(f"Using manual transcript in language: {selected_language}")
-                except Exception as e:
-                    logger.warning(f"No manual transcripts found: {str(e)}")
-                    
-            if not transcript:
-                # Try any generated transcript
-                try:
-                    generated_transcripts = transcript_list._generated_transcripts
-                    if generated_transcripts:
-                        transcript = list(generated_transcripts.values())[0]
-                        selected_language = transcript.language_code
-                        logger.info(f"Using generated transcript in language: {selected_language}")
-                except Exception as e:
-                    logger.warning(f"No generated transcripts found: {str(e)}")
+                # Try English variants first
+                for lang_code in self.english_codes:
+                    for t in transcript_source:
+                        if t.language_code == lang_code:
+                            transcript = t
+                            selected_language = t.language_code
+                            break
+                    if transcript:
+                        break
                         
-            if not transcript:
-                logger.error(f"No transcript available for video: {video_id}")
-                transcript_data.status = TranscriptStatus.FAILED
-                transcript_data.error_message = "No transcript available for this video"
-                return transcript_data
+                # If no English variants, try first available in this category
+                if not transcript and transcript_source:
+                    transcript = transcript_source[0]
+                    selected_language = transcript.language_code
             
-            # Fetch transcript data with error handling
+            if not transcript:
+                result.status = TranscriptStatus.FAILED
+                result.error = "No usable transcript found"
+                return result
+                
+            result.selected_language = selected_language
+            
+            # Step 5: Fetch transcript data
             try:
-                logger.info(f"Fetching transcript data for video: {video_id}")
                 transcript_entries = transcript.fetch()
                 
                 if not transcript_entries:
-                    logger.error(f"Empty transcript data for video: {video_id}")
-                    transcript_data.status = TranscriptStatus.FAILED
-                    transcript_data.error_message = "Transcript data is empty"
-                    return transcript_data
+                    result.status = TranscriptStatus.FAILED
+                    result.error = "Transcript data is empty"
+                    return result
                     
-                logger.info(f"Retrieved {len(transcript_entries)} transcript entries")
+                result.transcript_count = len(transcript_entries)
+                
+                # Process transcript segments
+                segments = []
+                full_text_parts = []
+                
+                for entry in transcript_entries:
+                    try:
+                        segment = TranscriptSegment(
+                            start=float(getattr(entry, 'start', 0.0)),
+                            duration=float(getattr(entry, 'duration', 0.0)),
+                            text=getattr(entry, 'text', '').strip()
+                        )
+                        
+                        segments.append(segment)
+                        if segment.text:
+                            full_text_parts.append(segment.text)
+                            
+                    except Exception:
+                        # Skip invalid segments
+                        continue
+                
+                if not segments:
+                    result.status = TranscriptStatus.FAILED
+                    result.error = "No valid segments processed"
+                    return result
+                
+                # Build final result
+                full_text = ' '.join(full_text_parts)
+                result.full_transcript = full_text
+                result.transcript_preview = (
+                    full_text[:200] + "..." if len(full_text) > 200 else full_text
+                )
+                result.segments = segments
+                result.status = TranscriptStatus.COMPLETED
                 
             except Exception as e:
-                logger.error(f"Failed to fetch transcript data: {str(e)}")
-                transcript_data.status = TranscriptStatus.FAILED
-                transcript_data.error_message = f"Failed to fetch transcript: {str(e)}"
-                return transcript_data
-            
-            # Convert to our format
-            segments = []
-            full_text_parts = []
-            
-            for i, entry in enumerate(transcript_entries):
-                try:
-                    # Access attributes directly from FetchedTranscriptSnippet object
-                    segment = TranscriptSegment(
-                        start=float(entry.start) if hasattr(entry, 'start') else 0.0,
-                        duration=float(entry.duration) if hasattr(entry, 'duration') else 0.0,
-                        text=entry.text.strip() if hasattr(entry, 'text') and entry.text else ''
-                    )
-                    segments.append(segment)
-                    if segment.text:  # Only add non-empty text
-                        full_text_parts.append(segment.text)
-                except Exception as e:
-                    logger.warning(f"Error processing segment {i}: {str(e)}")
-                    continue
-                    
-            if not segments:
-                logger.error("No valid segments found in transcript")
-                transcript_data.status = TranscriptStatus.FAILED
-                transcript_data.error_message = "No valid transcript segments found"
-                return transcript_data
-            
-            # Build final transcript data
-            transcript_data.segments = segments
-            transcript_data.full_text = ' '.join(full_text_parts)
-            transcript_data.language = selected_language or 'unknown'
-            transcript_data.video_id = video_id
-            transcript_data.status = TranscriptStatus.COMPLETED
-            
-            # Try to get video title (optional)
-            try:
-                transcript_data.video_title = f"Video {video_id}"
-                # You can implement actual title fetching here using pytube or YouTube API
-            except Exception as e:
-                logger.warning(f"Could not fetch video title: {str(e)}")
-            
-            logger.info(f"Successfully processed transcript for video: {video_id}")
-            
+                result.status = TranscriptStatus.FAILED
+                result.error = f"Failed to fetch transcript: {str(e)}"
+                return result
+                
         except Exception as e:
-            logger.error(f"Unexpected error processing transcript: {str(e)}")
-            transcript_data.status = TranscriptStatus.FAILED
-            transcript_data.error_message = f"Unexpected error: {str(e)}"
-            
-        return transcript_data
+            result.status = TranscriptStatus.FAILED
+            result.error = f"Unexpected error: {str(e)}"
+        
+        # Add processing time
+        result.processing_time = time.time() - start_time
+        return result
 
-    @staticmethod
-    def validate_youtube_url(url: str) -> bool:
-        """Validate if URL is a proper YouTube URL."""
-        if not url:
-            return False
-        return YouTubeService.extract_video_id(url) is not None
+# Create service instance
+youtube_service = YouTubeService()
