@@ -20,34 +20,34 @@ class PresentationService:
 
     def _paginate_content(self, lines: list[str], max_words: int, max_chars: int) -> list[list[str]]:
         """
-        Splits a list of lines into multiple pages based on word and character limits.
+        Splits text content into multiple pages based on word and character limits,
+        ensuring no page is overly dense.
         """
         pages = []
-        current_page_lines = []
-        current_word_count = 0
-        current_char_count = 0
+        # Join and clean all lines, then split into words to handle long paragraphs
+        full_text = " ".join(self._clean_text(line) for line in lines)
+        words = full_text.split()
 
-        for line in lines:
-            line_word_count = len(line.split())
-            line_char_count = len(line)
+        if not words:
+            return []
 
-            # If adding the new line exceeds limits, finalize the current page
-            if current_page_lines and (current_word_count + line_word_count > max_words or current_char_count + line_char_count > max_chars):
-                pages.append(current_page_lines)
-                # Start a new page
-                current_page_lines = [line]
-                current_word_count = line_word_count
-                current_char_count = line_char_count
+        current_page_words = []
+        for word in words:
+            # Check if adding the next word would exceed the limits
+            if current_page_words and (
+                len(" ".join(current_page_words) + " " + word) > max_chars or
+                len(current_page_words) + 1 > max_words
+            ):
+                # Finalize the current page and start a new one
+                pages.append([" ".join(current_page_words)])
+                current_page_words = [word]
             else:
-                # Add to the current page
-                current_page_lines.append(line)
-                current_word_count += line_word_count
-                current_char_count += line_char_count
-        
+                current_page_words.append(word)
+
         # Add the last remaining page
-        if current_page_lines:
-            pages.append(current_page_lines)
-            
+        if current_page_words:
+            pages.append([" ".join(current_page_words)])
+
         return pages
 
     def create_presentation_from_summary(self, document_id: str, summary_text: str) -> Path:
@@ -79,14 +79,22 @@ class PresentationService:
             # --- Intelligent Title Parsing ---
             title_line = lines.pop(0)
             title_match = re.match(r'^\s*(?:[IVXLCDM]+\.|\d+\.)\s*(.*)', title_line)
-            slide_title = self._clean_text(title_match.group(1) if title_match else title_line)
+            
+            raw_title = title_match.group(1) if title_match else title_line
+            slide_title_full = self._clean_text(raw_title)
+            
+            # Shorten title to a max of 5 words for conciseness
+            title_words = slide_title_full.split()
+            if len(title_words) > 5:
+                slide_title = ' '.join(title_words[:5]) + '...'
+            else:
+                slide_title = slide_title_full
 
             # --- Paginate Body Content ---
-            body_lines = [self._clean_text(line) for line in lines]
-            paginated_body = self._paginate_content(body_lines, max_words=100, max_chars=528)
+            paginated_body = self._paginate_content(lines, max_words=50, max_chars=275)
 
-            if not paginated_body: # Handle sections with only a title
-                paginated_body.append([])
+            if not paginated_body: # Skip sections with no content
+                continue
 
             # --- Create a Slide for Each Page ---
             for i, page_lines in enumerate(paginated_body):
@@ -100,16 +108,15 @@ class PresentationService:
                 text_frame = body_shape.text_frame
                 text_frame.clear()
                 
+                # This check is now redundant due to the continue above, but kept for safety
                 if not page_lines:
+                    continue
+                
+                for line in page_lines:
                     p = text_frame.add_paragraph()
-                    p.text = "(No additional content for this section)"
-                    p.font.italic = True
-                else:
-                    for line in page_lines:
-                        p = text_frame.add_paragraph()
-                        p.text = line
-                        p.level = 0
-                        p.font.size = Pt(16)
+                    p.text = line
+                    p.level = 0
+                    p.font.size = Pt(18)
 
         # --- Save Presentation ---
         file_path = PRESENTATION_DIR / f"{document_id}.pptx"
