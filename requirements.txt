@@ -77,3 +77,6 @@ zopfli==0.2.3.post1
 python-pptx
 pypdf
 python-docx
+supabase-py
+gotrue
+email-validator

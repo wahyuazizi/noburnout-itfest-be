@@ -27,6 +27,10 @@ class Settings(BaseSettings):
     # CORS settings
     cors_origins: list = ["http://localhost:3000", "http://127.0.0.1:3000"]
     
+    # Supabase settings
+    supabase_url: str
+    supabase_key: str
+    
     # Azure OpenAI setting
     azure_openai_api_key: str
     azure_openai_api_version: str
