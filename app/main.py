@@ -12,12 +12,14 @@ app = FastAPI(
 )
 
 # CORS middleware
+# Allow all origins for development purposes.
+# For production, you should restrict this to your frontend's domain.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
+    allow_origins=["*"],  # Allows all origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 # Include v1 API routes (which now includes both transcript and ai)

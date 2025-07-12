@@ -1,20 +1,13 @@
 # app/api/v1/router.py
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import transcript, ai
+from app.api.v1.endpoints import document
 
 api_router = APIRouter()
 
-# Include transcript endpoints
+# Include document processing endpoints
 api_router.include_router(
-    transcript.router,
-    prefix="/transcript",
-    tags=["transcript"]
-)
-
-# Include AI endpoints
-api_router.include_router(
-    ai.router,
-    prefix="/ai",
-    tags=["ai"]
+    document.router,
+    prefix="/document",
+    tags=["document"]
 )
