@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     """Application settings."""
     
     # App settings
-    app_name: str = "YouTube Transcript API"
+    app_name: str = "Document Processor API"
     version: str = "1.0.0"
     debug: bool = True
     
