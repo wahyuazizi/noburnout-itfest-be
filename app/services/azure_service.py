@@ -28,15 +28,15 @@ class AzureOpenAIService:
             Summary text
         """
         try:
-            system_prompt = """You are an expert at creating concise, informative summaries. 
-            Create a clear and comprehensive summary of the provided transcript that captures:
-            - Main topics and key points discussed
-            - Important insights or conclusions
-            - Key takeaways for the audience
+            system_prompt = """Anda adalah seorang ahli dalam membuat ringkasan yang ringkas dan informatif. 
+            Buat ringkasan transkrip yang jelas dan komprehensif yang mencakup:
+            - Topik utama dan poin-poin penting yang dibahas
+            - Wawasan atau kesimpulan penting
+            - Poin-poin penting bagi audiens
             
-            Keep the summary well-structured and easy to read."""
+            Jaga agar ringkasan terstruktur dengan baik dan mudah dibaca. Berikan ringkasan dalam Bahasa Indonesia."""
             
-            user_prompt = f"Please create a summary of this transcript:\n\n{transcript_text}"
+            user_prompt = f"Mohon buatkan ringkasan dari transkrip ini dalam Bahasa Indonesia:\n\n{transcript_text}"
             
             response = await self.client.chat.completions.create(
                 model=self.deployment_name,
