@@ -1,5 +1,6 @@
 # app/services/presentation_service.py
 import re
+import json
 from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
@@ -50,73 +51,44 @@ class PresentationService:
 
         return pages
 
-    def create_presentation_from_summary(self, document_id: str, summary_text: str) -> Path:
+    def create_presentation_from_content(self, document_id: str, json_content: str) -> Path:
         """
-        Creates a .pptx presentation from a structured summary, with intelligent
-        title parsing and content pagination.
+        Creates a .pptx presentation from a JSON structure containing the title and slides.
         """
-        prs = Presentation()
-        title_slide_layout = prs.slide_layouts[0]
-        content_slide_layout = prs.slide_layouts[1]
+        try:
+            content = json.loads(json_content)
+        except json.JSONDecodeError:
+            raise ValueError("Invalid JSON content received for presentation.")
 
+        prs = Presentation()
+        
         # --- Title Slide ---
+        title_slide_layout = prs.slide_layouts[0]
         slide = prs.slides.add_slide(title_slide_layout)
         title = slide.shapes.title
-        title.text = "Presentation Summary"
-        if len(slide.placeholders) > 1:
-            slide.placeholders[1].text = f"Generated from document: {document_id}"
+        subtitle = slide.placeholders[1] if len(slide.placeholders) > 1 else None
+        
+        title.text = content.get("title", "Presentation")
+        if subtitle:
+            subtitle.text = f"Generated from document: {document_id}"
 
-        # --- Section Splitting ---
-        section_pattern = re.compile(r'\n(?=\s*(?:[IVXLCDM]+\.|\d+\.)\s+)', re.IGNORECASE)
-        sections = section_pattern.split(summary_text.strip())
-
-        # --- Create Content Slides ---
-        for section_text in sections:
-            lines = [line.strip() for line in section_text.strip().split('\n') if line.strip()]
-            if not lines:
-                continue
-
-            # --- Intelligent Title Parsing ---
-            title_line = lines.pop(0)
-            title_match = re.match(r'^\s*(?:[IVXLCDM]+\.|\d+\.)\s*(.*)', title_line)
+        # --- Content Slides ---
+        content_slide_layout = prs.slide_layouts[1]
+        for slide_data in content.get("slides", []):
+            slide = prs.slides.add_slide(content_slide_layout)
+            title_shape = slide.shapes.title
+            body_shape = slide.placeholders[1]
             
-            raw_title = title_match.group(1) if title_match else title_line
-            slide_title_full = self._clean_text(raw_title)
+            title_shape.text = slide_data.get("title", "")
             
-            # Shorten title to a max of 5 words for conciseness
-            title_words = slide_title_full.split()
-            if len(title_words) > 5:
-                slide_title = ' '.join(title_words[:5]) + '...'
-            else:
-                slide_title = slide_title_full
-
-            # --- Paginate Body Content ---
-            paginated_body = self._paginate_content(lines, max_words=50, max_chars=275)
-
-            if not paginated_body: # Skip sections with no content
-                continue
-
-            # --- Create a Slide for Each Page ---
-            for i, page_lines in enumerate(paginated_body):
-                slide = prs.slides.add_slide(content_slide_layout)
-                title_shape = slide.shapes.title
-                body_shape = slide.placeholders[1]
-                
-                # Add "(continued)" for subsequent slides of the same section
-                title_shape.text = f"{slide_title} (lanjutan)" if i > 0 else slide_title
-                
-                text_frame = body_shape.text_frame
-                text_frame.clear()
-                
-                # This check is now redundant due to the continue above, but kept for safety
-                if not page_lines:
-                    continue
-                
-                for line in page_lines:
-                    p = text_frame.add_paragraph()
-                    p.text = line
-                    p.level = 0
-                    p.font.size = Pt(18)
+            text_frame = body_shape.text_frame
+            text_frame.clear()
+            
+            for point in slide_data.get("content", []):
+                p = text_frame.add_paragraph()
+                p.text = self._clean_text(point)
+                p.level = 0
+                p.font.size = Pt(18)
 
         # --- Save Presentation ---
         file_path = PRESENTATION_DIR / f"{document_id}.pptx"

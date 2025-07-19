@@ -60,13 +60,16 @@ async def generate_presentation(document_id: str):
         if not text.strip():
             raise HTTPException(status_code=400, detail="Extracted text is empty.")
             
-        # 2. Generate summary
-        summary = await azure_service.create_summary(transcript_text=text)
-        if not summary.strip():
-            raise HTTPException(status_code=500, detail="Failed to generate summary.")
+        # 2. Generate presentation content
+        presentation_content = await azure_service.create_presentation_content(document_text=text)
+        if not presentation_content.strip():
+            raise HTTPException(status_code=500, detail="Failed to generate presentation content.")
 
         # 3. Create presentation
-        presentation_path = presentation_service.create_presentation_from_summary(document_id, summary)
+        presentation_path = presentation_service.create_presentation_from_content(
+            document_id,
+            presentation_content
+        )
         
         # 4. Create response with download URL
         response = PresentationResponse(
