@@ -1,3 +1,7 @@
+## Repositori Frontend
+
+Frontend untuk proyek ini dapat ditemukan di: [https://github.com/maulidihidayat/frontend-itfest](https://github.com/maulidihidayat/frontend-itfest)
+
 # NoBurnout ITFest Backend
 
 Repositori ini berisi layanan backend untuk proyek NoBurnout ITFest. Dibangun menggunakan FastAPI.
